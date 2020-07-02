@@ -49,6 +49,8 @@ public class EarTrainingGUI {
     private JCheckBox amChk = new JCheckBox("Am", true);
     private JCheckBox dmChk = new JCheckBox("Dm", true);
     private JCheckBox emChk = new JCheckBox("Em", true);
+    private JCheckBox gChk = new JCheckBox("G", true);
+    private JCheckBox cChk = new JCheckBox("C", true);
     private JFrame options;
     private JFrame player;
     
@@ -164,6 +166,8 @@ public class EarTrainingGUI {
         amChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.4), (int)(windowWidth*0.1), (int)(windowHeight*0.1));
         dmChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.5), (int)(windowWidth*0.1), (int)(windowHeight*0.1));
         emChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.6), (int)(windowWidth*0.1), (int)(windowHeight*0.1));
+        gChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.7), (int)(windowWidth*0.1), (int)(windowHeight*0.1));
+        cChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.8), (int)(windowWidth*0.1), (int)(windowHeight*0.1));
         
         // plays audio when "p" key is pressed
         spaceListener = new KeyListener() {
@@ -227,6 +231,8 @@ public class EarTrainingGUI {
         options.add(amChk);
         options.add(dmChk);
         options.add(emChk);
+        options.add(gChk);
+        options.add(cChk);
         
         // setup options frame
         options.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -249,6 +255,8 @@ public class EarTrainingGUI {
         amChk.addMouseListener(chkListener);
         dmChk.addMouseListener(chkListener);
         emChk.addMouseListener(chkListener);
+        gChk.addMouseListener(chkListener);
+        cChk.addMouseListener(chkListener);
         
         // setup player frame
         player.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -279,6 +287,10 @@ public class EarTrainingGUI {
         if(dmChk.isSelected())
             chordCount++;
         if(emChk.isSelected())
+            chordCount++;
+        if(gChk.isSelected())
+            chordCount++;
+        if(cChk.isSelected())
             chordCount++;
         randomNum = (int)(Math.random()*chordCount) + 1;
         for(int i = 0; i < chordNum; i++) {
@@ -311,6 +323,16 @@ public class EarTrainingGUI {
                 randomNum--;
                 if(randomNum == 0)
                     return "Em";
+            }
+            if(gChk.isSelected()) {
+                randomNum--;
+                if(randomNum == 0)
+                    return "G";
+            }
+            if(cChk.isSelected()) {
+                randomNum--;
+                if(randomNum == 0)
+                    return "C";
             }
         }
         return "Error in chooseChord()";
