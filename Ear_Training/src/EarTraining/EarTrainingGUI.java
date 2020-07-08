@@ -32,7 +32,6 @@ public class EarTrainingGUI {
     // primitives
     private static int windowWidth;
     private static int windowHeight;
-    private static int chordNum = 6;
     private int attempts;
     private int correct;
     
@@ -283,67 +282,65 @@ public class EarTrainingGUI {
         
         // select chord
         randomNum = (int)(Math.random()*countSelectedChords()) + 1;
-        for(int i = 0; i < chordNum; i++) {
-            if(aChk.isSelected()) {
-                randomNum--;
-                if(randomNum == 0)
-                    return "A";
-            }
-            if(dChk.isSelected()) {
-                randomNum--;
-                if(randomNum == 0)
-                    return "D";
-            }
-            if(eChk.isSelected()) {
-                randomNum--;
-                if(randomNum == 0)
-                    return "E";
-            }
-            if(amChk.isSelected()) {
-                randomNum--;
-                if(randomNum == 0)
-                    return "Am";
-            }
-            if(dmChk.isSelected()) {
-                randomNum--;
-                if(randomNum == 0)
-                    return "Dm";
-            }
-            if(emChk.isSelected()) {
-                randomNum--;
-                if(randomNum == 0)
-                    return "Em";
-            }
-            if(gChk.isSelected()) {
-                randomNum--;
-                if(randomNum == 0)
-                    return "G";
-            }
-            if(cChk.isSelected()) {
-                randomNum--;
-                if(randomNum == 0)
-                    return "C";
-            }
-            if(g7Chk.isSelected()) {
-                randomNum--;
-                if(randomNum == 0)
-                    return "G7";
-            }
-            if(c7Chk.isSelected()) {
-                randomNum--;
-                if(randomNum == 0)
-                    return "C7";
-            }
-            if(b7Chk.isSelected()) {
-                randomNum--;
-                if(randomNum == 0)
-                    return "B7";
-            }
-            if(fMaj7Chk.isSelected()) {
-                randomNum--;
-                if(randomNum == 0)
-                    return "Fmaj7";
-            }
+        if(aChk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "A";
+        }
+        if(dChk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "D";
+        }
+        if(eChk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "E";
+        }
+        if(amChk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "Am";
+        }
+        if(dmChk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "Dm";
+        }
+        if(emChk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "Em";
+        }
+        if(gChk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "G";
+        }
+        if(cChk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "C";
+        }
+        if(g7Chk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "G7";
+        }
+        if(c7Chk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "C7";
+        }
+        if(b7Chk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "B7";
+        }
+        if(fMaj7Chk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "Fmaj7";
         }
         return "Error in chooseChord()";
     }   
