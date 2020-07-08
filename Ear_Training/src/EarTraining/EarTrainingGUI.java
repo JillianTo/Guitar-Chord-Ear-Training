@@ -33,6 +33,8 @@ public class EarTrainingGUI {
     private static int windowWidth;
     private static int windowHeight;
     private static int chordNum = 6;
+    private int attempts;
+    private int correct;
     
     // sound objects
     private AudioInputStream audioInputStream;
@@ -42,6 +44,7 @@ public class EarTrainingGUI {
     private JButton chkAnsBtn;
     private JButton optionsBtn;
     private JButton playBtn;
+    private JLabel statsLbl;
     private JTextField ansFld;
     private JCheckBox aChk = new JCheckBox("A", true);
     private JCheckBox dChk = new JCheckBox("D", true);
@@ -51,6 +54,10 @@ public class EarTrainingGUI {
     private JCheckBox emChk = new JCheckBox("Em", true);
     private JCheckBox gChk = new JCheckBox("G", true);
     private JCheckBox cChk = new JCheckBox("C", true);
+    private JCheckBox g7Chk = new JCheckBox("G7", true);
+    private JCheckBox c7Chk = new JCheckBox("C7", true);
+    private JCheckBox b7Chk = new JCheckBox("B7", true);
+    private JCheckBox fMaj7Chk = new JCheckBox("Fmaj7", true);
     private JFrame options;
     private JFrame player;
     
@@ -64,7 +71,8 @@ public class EarTrainingGUI {
         // initializations
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
- 
+        attempts = 0;
+        correct = 0;
 
         // instantiations
         chord = chooseChord();
@@ -87,6 +95,7 @@ public class EarTrainingGUI {
         chkAnsBtn = new JButton("Check Answer (Enter)");
         optionsBtn = new JButton("Options");
         playBtn = new JButton("Play Chord (Right Arrow)");
+        statsLbl = new JLabel(correct + "/" + attempts + " correct (100%)");
         ansFld = new JTextField();
         options = new JFrame("Options");
         player = new JFrame("Single Sound Recognition");
@@ -105,28 +114,37 @@ public class EarTrainingGUI {
         chkAnsBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(ansFld.getText().replaceAll(" ","").toUpperCase().equals(chord.toUpperCase())) {
-                    chord = chooseChord();
-                    clip.stop();
-                    clip.close();
-                    try {
-                        audioInputStream = AudioSystem.getAudioInputStream(new File(chord+".wav").getAbsoluteFile());
-                    } catch (UnsupportedAudioFileException ex) {
-                        Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
+                if(ansFld.getText().equals("cheat")) {
+                    JOptionPane.showMessageDialog(player, chord);
+                } else {
+                    attempts++;
+                    if(ansFld.getText().replaceAll(" ","").toUpperCase().equals(chord.replaceAll(" ","").toUpperCase())) {
+                        chord = chooseChord();
+                        clip.stop();
+                        clip.close();
+                        try {
+                            audioInputStream = AudioSystem.getAudioInputStream(new File(chord+".wav").getAbsoluteFile());
+                        } catch (UnsupportedAudioFileException ex) {
+                            Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        try {
+                            clip.open(audioInputStream);
+                        } catch (LineUnavailableException ex) {
+                            Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        ansFld.setText("");
+                        correct++;
+                        statsLbl.setText(correct + "/" + attempts + " correct (" + (correct*100/attempts) + "%)");
+                        JOptionPane.showMessageDialog(player, "Correct!");
+                    } else {
+                        statsLbl.setText(correct + "/" + attempts + " correct (" + (correct*100/attempts) + "%)");
+                        JOptionPane.showMessageDialog(player, "Incorrect, try again");
                     }
-                    try {
-                        clip.open(audioInputStream);
-                    } catch (LineUnavailableException ex) {
-                        Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    ansFld.setText("");
-                    JOptionPane.showMessageDialog(player, "Correct!");
-                } else
-                    JOptionPane.showMessageDialog(player, "Incorrect, try again");
+                }
             }
         });
         
@@ -149,6 +167,8 @@ public class EarTrainingGUI {
             }
         });
         
+        // statsLbl label setup
+        statsLbl.setBounds((int)(windowWidth*0.6), (int)(windowHeight*0.8), (int)(windowWidth*0.3), (int)(windowHeight*0.1));
         
         // answer text field setup
         ansFld.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.7), (int)(windowWidth*0.4), (int)(windowHeight*0.1));
@@ -160,21 +180,25 @@ public class EarTrainingGUI {
         });
         
         // check boxes setup
-        aChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.1), (int)(windowWidth*0.1), (int)(windowHeight*0.1));
-        dChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.2), (int)(windowWidth*0.1), (int)(windowHeight*0.1));
-        eChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.3), (int)(windowWidth*0.1), (int)(windowHeight*0.1));
-        amChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.4), (int)(windowWidth*0.1), (int)(windowHeight*0.1));
-        dmChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.5), (int)(windowWidth*0.1), (int)(windowHeight*0.1));
-        emChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.6), (int)(windowWidth*0.1), (int)(windowHeight*0.1));
-        gChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.7), (int)(windowWidth*0.1), (int)(windowHeight*0.1));
-        cChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.8), (int)(windowWidth*0.1), (int)(windowHeight*0.1));
+        aChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.05), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        dChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.15), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        eChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.25), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        amChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.35), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        dmChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.45), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        emChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.55), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        gChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.65), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        cChk.setBounds((int)(windowWidth*0.05), (int)(windowHeight*0.75), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        g7Chk.setBounds((int)(windowWidth*0.25), (int)(windowHeight*0.05), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        c7Chk.setBounds((int)(windowWidth*0.25), (int)(windowHeight*0.15), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        b7Chk.setBounds((int)(windowWidth*0.25), (int)(windowHeight*0.25), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        fMaj7Chk.setBounds((int)(windowWidth*0.25), (int)(windowHeight*0.35), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
         
-        // plays audio when "p" key is pressed
+        // plays audio when right arrow key is pressed
         spaceListener = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
 
-            // plays audio when "p" key is pressed
+            // plays audio when right arrow key is pressed
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -233,6 +257,10 @@ public class EarTrainingGUI {
         options.add(emChk);
         options.add(gChk);
         options.add(cChk);
+        options.add(g7Chk);
+        options.add(c7Chk);
+        options.add(b7Chk);
+        options.add(fMaj7Chk);
         
         // setup options frame
         options.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -244,6 +272,7 @@ public class EarTrainingGUI {
         player.add(chkAnsBtn);
         player.add(optionsBtn);
         player.add(playBtn);
+        player.add(statsLbl);
         player.add(ansFld);
         
         // add listeners
@@ -257,6 +286,10 @@ public class EarTrainingGUI {
         emChk.addMouseListener(chkListener);
         gChk.addMouseListener(chkListener);
         cChk.addMouseListener(chkListener);
+        g7Chk.addMouseListener(chkListener);
+        c7Chk.addMouseListener(chkListener);
+        b7Chk.addMouseListener(chkListener);
+        fMaj7Chk.addMouseListener(chkListener);
         
         // setup player frame
         player.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -291,6 +324,14 @@ public class EarTrainingGUI {
         if(gChk.isSelected())
             chordCount++;
         if(cChk.isSelected())
+            chordCount++;
+        if(g7Chk.isSelected())
+            chordCount++;
+        if(c7Chk.isSelected())
+            chordCount++;
+        if(b7Chk.isSelected())
+            chordCount++;
+        if(fMaj7Chk.isSelected())
             chordCount++;
         randomNum = (int)(Math.random()*chordCount) + 1;
         for(int i = 0; i < chordNum; i++) {
@@ -333,6 +374,26 @@ public class EarTrainingGUI {
                 randomNum--;
                 if(randomNum == 0)
                     return "C";
+            }
+            if(g7Chk.isSelected()) {
+                randomNum--;
+                if(randomNum == 0)
+                    return "G7";
+            }
+            if(c7Chk.isSelected()) {
+                randomNum--;
+                if(randomNum == 0)
+                    return "C7";
+            }
+            if(b7Chk.isSelected()) {
+                randomNum--;
+                if(randomNum == 0)
+                    return "B7";
+            }
+            if(fMaj7Chk.isSelected()) {
+                randomNum--;
+                if(randomNum == 0)
+                    return "Fmaj7";
             }
         }
         return "Error in chooseChord()";
