@@ -120,22 +120,7 @@ public class EarTrainingGUI {
                     attempts++;
                     if(ansFld.getText().replaceAll(" ","").toUpperCase().equals(chord.replaceAll(" ","").toUpperCase())) {
                         chord = chooseChord();
-                        clip.stop();
-                        clip.close();
-                        try {
-                            audioInputStream = AudioSystem.getAudioInputStream(new File(chord+".wav").getAbsoluteFile());
-                        } catch (UnsupportedAudioFileException ex) {
-                            Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
-                            Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        try {
-                            clip.open(audioInputStream);
-                        } catch (LineUnavailableException ex) {
-                            Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
-                            Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        resetAudioSys();
                         ansFld.setText("");
                         correct++;
                         statsLbl.setText(correct + "/" + attempts + " correct (" + (correct*100/attempts) + "%)");
@@ -211,34 +196,23 @@ public class EarTrainingGUI {
             public void keyReleased(KeyEvent e) {}
         };
         
-        // resets chord when options are changed
+        // resets chord when options are changed and checks to make sure at least one chord is selected
         chkListener = new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {}
 
             @Override
-            public void mousePressed(MouseEvent e) {
-                chord = chooseChord();
-                clip.stop();
-                clip.close();
-                try {
-                    audioInputStream = AudioSystem.getAudioInputStream(new File(chord+".wav").getAbsoluteFile());
-                } catch (UnsupportedAudioFileException ex) {
-                    Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                try {
-                    clip.open(audioInputStream);
-                } catch (LineUnavailableException ex) {
-                    Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            public void mousePressed(MouseEvent e) {}
 
             @Override
-            public void mouseReleased(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {
+                if(countSelectedChords() == 0)
+                    JOptionPane.showMessageDialog(player, "Please select at least one chord to continue");
+                else {
+                    chord = chooseChord();
+                    resetAudioSys();
+                }
+            }
 
             @Override
             public void mouseEntered(MouseEvent e) {}
@@ -305,35 +279,10 @@ public class EarTrainingGUI {
     // chooses random audio file
     private String chooseChord() {
         // primitives
-        int chordCount = 0;
         int randomNum;
         
         // select chord
-        if(aChk.isSelected())
-            chordCount++;
-        if(dChk.isSelected())
-            chordCount++;
-        if(eChk.isSelected())
-            chordCount++;
-        if(amChk.isSelected())
-            chordCount++;
-        if(dmChk.isSelected())
-            chordCount++;
-        if(emChk.isSelected())
-            chordCount++;
-        if(gChk.isSelected())
-            chordCount++;
-        if(cChk.isSelected())
-            chordCount++;
-        if(g7Chk.isSelected())
-            chordCount++;
-        if(c7Chk.isSelected())
-            chordCount++;
-        if(b7Chk.isSelected())
-            chordCount++;
-        if(fMaj7Chk.isSelected())
-            chordCount++;
-        randomNum = (int)(Math.random()*chordCount) + 1;
+        randomNum = (int)(Math.random()*countSelectedChords()) + 1;
         for(int i = 0; i < chordNum; i++) {
             if(aChk.isSelected()) {
                 randomNum--;
@@ -398,4 +347,55 @@ public class EarTrainingGUI {
         }
         return "Error in chooseChord()";
     }   
+    
+    private int countSelectedChords() {
+        // primitives
+        int chordCount = 0;
+        
+        // count selected chords
+        if(aChk.isSelected())
+            chordCount++;
+        if(dChk.isSelected())
+            chordCount++;
+        if(eChk.isSelected())
+            chordCount++;
+        if(amChk.isSelected())
+            chordCount++;
+        if(dmChk.isSelected())
+            chordCount++;
+        if(emChk.isSelected())
+            chordCount++;
+        if(gChk.isSelected())
+            chordCount++;
+        if(cChk.isSelected())
+            chordCount++;
+        if(g7Chk.isSelected())
+            chordCount++;
+        if(c7Chk.isSelected())
+            chordCount++;
+        if(b7Chk.isSelected())
+            chordCount++;
+        if(fMaj7Chk.isSelected())
+            chordCount++;
+        return chordCount;
+    }
+    
+    private void resetAudioSys() {
+        clip.stop();
+        clip.close();
+        try {
+            audioInputStream = AudioSystem.getAudioInputStream(new File(chord+".wav").getAbsoluteFile());
+        } catch (UnsupportedAudioFileException ex) {
+            Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            clip.open(audioInputStream);
+        } catch (LineUnavailableException ex) {
+            Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(EarTrainingGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
