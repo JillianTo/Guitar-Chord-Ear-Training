@@ -57,6 +57,9 @@ public class EarTrainingGUI {
     private JCheckBox c7Chk = new JCheckBox("C7", true);
     private JCheckBox b7Chk = new JCheckBox("B7", true);
     private JCheckBox fMaj7Chk = new JCheckBox("Fmaj7", true);
+    private JCheckBox a7Chk = new JCheckBox("A7", true);
+    private JCheckBox d7Chk = new JCheckBox("D7", true);
+    private JCheckBox e7Chk = new JCheckBox("E7", true);
     private JFrame options;
     private JFrame player;
     
@@ -176,6 +179,9 @@ public class EarTrainingGUI {
         c7Chk.setBounds((int)(windowWidth*0.25), (int)(windowHeight*0.15), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
         b7Chk.setBounds((int)(windowWidth*0.25), (int)(windowHeight*0.25), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
         fMaj7Chk.setBounds((int)(windowWidth*0.25), (int)(windowHeight*0.35), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        a7Chk.setBounds((int)(windowWidth*0.25), (int)(windowHeight*0.45), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        d7Chk.setBounds((int)(windowWidth*0.25), (int)(windowHeight*0.55), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
+        e7Chk.setBounds((int)(windowWidth*0.25), (int)(windowHeight*0.65), (int)(windowWidth*0.2), (int)(windowHeight*0.1));
         
         // plays audio when right arrow key is pressed
         spaceListener = new KeyListener() {
@@ -234,6 +240,9 @@ public class EarTrainingGUI {
         options.add(c7Chk);
         options.add(b7Chk);
         options.add(fMaj7Chk);
+        options.add(a7Chk);
+        options.add(d7Chk);
+        options.add(e7Chk);
         
         // setup options frame
         options.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -263,6 +272,9 @@ public class EarTrainingGUI {
         c7Chk.addMouseListener(chkListener);
         b7Chk.addMouseListener(chkListener);
         fMaj7Chk.addMouseListener(chkListener);
+        a7Chk.addMouseListener(chkListener);
+        d7Chk.addMouseListener(chkListener);
+        e7Chk.addMouseListener(chkListener);
         
         // setup player frame
         player.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -342,6 +354,21 @@ public class EarTrainingGUI {
             if(randomNum == 0)
                 return "Fmaj7";
         }
+        if(a7Chk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "A7";
+        }
+        if(d7Chk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "D7";
+        }
+        if(e7Chk.isSelected()) {
+            randomNum--;
+            if(randomNum == 0)
+                return "E7";
+        }
         return "Error in chooseChord()";
     }   
     
@@ -373,6 +400,12 @@ public class EarTrainingGUI {
         if(b7Chk.isSelected())
             chordCount++;
         if(fMaj7Chk.isSelected())
+            chordCount++;
+        if(a7Chk.isSelected())
+            chordCount++;
+        if(d7Chk.isSelected())
+            chordCount++;
+        if(e7Chk.isSelected())
             chordCount++;
         return chordCount;
     }
